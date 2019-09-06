@@ -63,7 +63,7 @@ block content
                     var opts = { video: document.getElementById('preview') };
                     var sel = document.getElementById('availablecams');
                     var selCam = sel.options[sel.selectedIndex].value;
-                    if(selCam==1) {
+                    if(selCam==0) {
                         opts = { video: document.getElementById('preview'), mirror: false };
                     }
                     let scanner = new Instascan.Scanner( opts );
@@ -85,6 +85,7 @@ block content
                     var sel = document.getElementById('availablecams');
                     if (cameras.length > 0) {
                         cameras.forEach(function(cam, i){
+                            console.log(cam);
                             var opt = document.createElement('option');
                             opt.appendChild( document.createTextNode(cam.name) );
                             opt.value = i;
