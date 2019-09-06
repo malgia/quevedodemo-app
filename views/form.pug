@@ -60,6 +60,9 @@ block content
 
             script.
                 function initCam(){
+                    if(scanner){
+                        scanner.stop();
+                    }
                     var opts = { video: document.getElementById('preview') };
                     var sel = document.getElementById('availablecams');
                     var selCam = sel.options[sel.selectedIndex].value;
