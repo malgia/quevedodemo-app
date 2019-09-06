@@ -1,0 +1,19 @@
+extends layout
+
+block content
+
+  if motorcycles.length
+    table
+      tr
+        th # Placa
+        th Nombre
+        th Fecha de Caducidad
+        th # Pasajeros
+      each motorcycle in motorcycles
+        tr
+          td= motorcycle.plateid
+          td= motorcycle.name
+          td= motorcycle.expiredate
+          td= motorcycle.passengers
+  else
+    p No motorcycles yet :(

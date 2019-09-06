@@ -1,0 +1,72 @@
+extends layout
+
+block content
+    -data = data || {}
+
+    if errors
+        ul
+            for error in errors
+                li= error.msg
+
+    div(class="row")
+        div(class="col-6")
+            h2 Nueva Moto
+            form(action="." method="POST")
+
+                label(for="plateid") Placa:
+                input(
+                type="text"
+                id="plateid"
+                name="plateid"
+                value=data.plateid
+                class="form-control"
+                )
+
+                label(for="name") Nombre:
+                input(
+                type="text"
+                id="name"
+                name="name"
+                value=data.name
+                class="form-control"
+                )
+
+                label(for="expiredate") Caducidad:
+                input(
+                type="text"
+                id="expiredate"
+                name="expiredate"
+                value=data.expiredate
+                class="form-control"
+                )
+
+                label(for="passengers") Ocupantes:
+                input(
+                type="text"
+                id="passengers"
+                name="passengers"
+                value=data.passengers
+                class="form-control"
+                )
+
+                input(type="submit" value="Submit" class="btn btn-lg btn-primary btn-block")
+
+        div(class="col-6")
+            h2 Buscar Moto
+            a(class="btn btn-lg btn-primary btn-block" href="#" onclick=scanQR()) Escanear QR
+            video(id="preview")
+
+            script.
+                let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+                scanner.addListener('scan', function (content) {
+                console.log(content);
+                });
+                Instascan.Camera.getCameras().then(function (cameras) {
+                if (cameras.length > 0) {
+                scanner.start(cameras[0]);
+                } else {
+                console.error('No cameras found.');
+                }
+                }).catch(function (e) {
+                console.error(e);
+                });
