@@ -1,13 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const { check, validationResult } = require('express-validator');
-const scanQR = require('../scanQR');
 
 const router = express.Router();
 const Motorcycle = mongoose.model('Motorcycle');
 
 router.get('/', (req, res) => {
-  res.render('form', { title: 'Registration form', scanQR: scanQR });
+  res.render('form', { title: 'Registration form' });
 });
 
 router.post('/',
@@ -28,14 +27,21 @@ router.post('/',
       res.render('form', {
         title: 'Registro de Motocicletas',
         errors: errors.array(),
-        data: req.body,
-        scanQR: scanQR
+        data: req.body
       });
     }
 });
 
 router.get('/motos', (req, res) => {
     Motorcycle.find()
+      .then((motorcycles) => {
+        res.render('index', { title: 'Listado de Motocicletas', motorcycles });
+      })
+      .catch(() => { res.send('Oops! Hubo un error'); });
+});
+
+router.get('/motos/:plateid', (req, res) => {
+    Motorcycle.find({plateid: req.params.plateid})
       .then((motorcycles) => {
         res.render('index', { title: 'Listado de Motocicletas', motorcycles });
       })

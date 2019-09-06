@@ -53,22 +53,24 @@ block content
 
         div(class="col-6")
             h2 Buscar Moto
-            a(class="btn btn-lg btn-primary btn-block" href="#" onclick=scanQR()) Escanear QR
+            a(class="btn btn-lg btn-primary btn-block" href="#" onclick="initCam();") Escanear QR
             video(id="preview")
 
             script.
-                let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
-                scanner.addListener('scan', function (content) {
-                console.log(content);
-                });
-                Instascan.Camera.getCameras().then(function (cameras) {
-                if (cameras.length > 1) {
-                scanner.start(cameras[1]);
-                } else if (cameras.length > 0) {
-                scanner.start(cameras[0]);
-                } else {
-                console.error('No cameras found.');
+                function initCam(){
+                    let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+                    scanner.addListener('scan', function (content) {
+                        window.location.href = '/motos/'+content;
+                    });
+                    Instascan.Camera.getCameras().then(function (cameras) {
+                    if (cameras.length > 1) {
+                    scanner.start(cameras[1]);
+                    } else if (cameras.length > 0) {
+                    scanner.start(cameras[0]);
+                    } else {
+                    console.error('No cameras found.');
+                    }
+                    }).catch(function (e) {
+                    console.error(e);
+                    });
                 }
-                }).catch(function (e) {
-                console.error(e);
-                });
