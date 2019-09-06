@@ -63,6 +63,7 @@ block content
                     var opts = { video: document.getElementById('preview') };
                     var sel = document.getElementById('availablecams');
                     var selCam = sel.options[sel.selectedIndex].value;
+                    console.log(selCam);
                     if(selCam==0) {
                         opts = { video: document.getElementById('preview'), mirror: false };
                     }
