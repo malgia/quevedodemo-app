@@ -59,18 +59,17 @@ block content
 
 
             script.
+                var scanner = null;
+
                 function initCam(){
-                    if(scanner){
-                        scanner.stop();
-                    }
                     var opts = { video: document.getElementById('preview') };
                     var sel = document.getElementById('availablecams');
                     var selCam = sel.options[sel.selectedIndex].value;
-                    console.log(selCam);
+
                     if(selCam==0) {
                         opts = { video: document.getElementById('preview'), mirror: false };
                     }
-                    let scanner = new Instascan.Scanner( opts );
+                    scanner = new Instascan.Scanner( opts );
                     scanner.addListener('scan', function (content) {
                         window.location.href = '/motos/'+content;
                     });
@@ -87,6 +86,11 @@ block content
 
                 Instascan.Camera.getCameras().then(function (cameras) {
                     var sel = document.getElementById('availablecams');
+                    sel.addEventListener("change", function(){
+                        if(scanner != null) {
+                            scanner.stop();
+                        }
+                    });
                     if (cameras.length > 0) {
                         cameras.forEach(function(cam, i){
                             console.log(cam);
