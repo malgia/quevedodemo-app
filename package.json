@@ -19,12 +19,23 @@
     "express-validator": "^6.2.0",
     "jsdom": "^15.1.1",
     "mongoose": "^5.6.12",
-    "pug": "^2.0.4"
+    "multer": "^1.4.2",
+    "node-pre-gyp": "^0.13.0",
+    "node-tesseract": "^0.2.7",
+    "node-tesseract-ocr-fixed": "^1.0.0",
+    "opencv4nodejs": "justadudewhohacks/opencv4nodejs#master",
+    "pug": "^2.0.4",
+    "stream-filter": "^2.1.0",
+    "ws": "^6.1.0"
   },
   "devDependencies": {
     "nodemon": "^1.19.2"
-},
+  },
   "engines": {
     "node": "8.11.3"
+  },
+  "opencv4nodejs": {
+    "autoBuildFlags": "-DBUILD_opencv_dnn_objdetect=ON",
+    "autoBuildOpencvVersion": "4.1.1"
   }
 }

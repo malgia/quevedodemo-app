@@ -10,7 +10,7 @@ block content
 
     div(class="row")
         div(class="col-6")
-            h2 Nueva Moto
+            h2 Agregar Moto
             form(action="." method="POST")
 
                 label(for="plateid") Placa:
@@ -19,6 +19,15 @@ block content
                 id="plateid"
                 name="plateid"
                 value=data.plateid
+                class="form-control"
+                )
+
+                label(for="shortid") Placa Corta:
+                input(
+                type="text"
+                id="shortid"
+                name="shortid"
+                value=data.shortid
                 class="form-control"
                 )
 
@@ -52,55 +61,12 @@ block content
                 input(type="submit" value="Submit" class="btn btn-lg btn-primary btn-block")
 
         div(class="col-6")
-            h2 Buscar Moto
-            a(class="btn btn-lg btn-primary btn-block" href="#" onclick="initCam();") Escanear QR
+            h2 Camara a usar:
             select(id="availablecams")
+            h2 Buscar Moto
+            a(class="btn btn-lg btn-primary btn-block" href="#" onclick="initCamQR();") Escanear QR
+            h2 Detectar placas
+            a(class="btn btn-lg btn-primary btn-block" href="#" onclick="initCamDetect();") Detectar
             video(id="preview")
-
-
-            script.
-                var scanner = null;
-
-                function initCam(){
-                    var opts = { video: document.getElementById('preview') };
-                    var sel = document.getElementById('availablecams');
-                    var selCam = sel.options[sel.selectedIndex].value;
-
-                    if(selCam==1) {
-                        opts = { video: document.getElementById('preview'), mirror: false };
-                    }
-                    scanner = new Instascan.Scanner( opts );
-                    scanner.addListener('scan', function (content) {
-                        window.location.href = '/motos/'+content;
-                    });
-                    Instascan.Camera.getCameras().then(function (cameras) {
-                        if (cameras.length > 0) {
-                            scanner.start(cameras[selCam]);
-                        } else {
-                            console.error('No cameras found.');
-                        }
-                    }).catch(function (e) {
-                    console.error(e);
-                    });
-                }
-
-                Instascan.Camera.getCameras().then(function (cameras) {
-                    var sel = document.getElementById('availablecams');
-                    sel.addEventListener("change", function(){
-                        if(scanner != null) {
-                            scanner.stop();
-                        }
-                    });
-                    if (cameras.length > 0) {
-                        cameras.forEach(function(cam, i){
-                            var opt = document.createElement('option');
-                            opt.appendChild( document.createTextNode(cam.name) );
-                            opt.value = i;
-                            sel.appendChild(opt);
-                        });
-                    } else {
-                        console.error('No cameras found.');
-                    }
-                }).catch(function (e) {
-                console.error(e);
-                });
+            img(id="screenshot" class="hidden")
+            img(id="proccesed")

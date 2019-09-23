@@ -5,6 +5,10 @@ const motorcycleSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
+  shortid: {
+    type: String,
+    trim: true,
+  },
   name: {
     type: String,
     trim: true,
