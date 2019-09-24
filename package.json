@@ -21,8 +21,6 @@
     "mongoose": "^5.6.12",
     "multer": "^1.4.2",
     "node-pre-gyp": "^0.13.0",
-    "node-tesseract": "^0.2.7",
-    "node-tesseract-ocr-fixed": "^1.0.0",
     "opencv4nodejs": "justadudewhohacks/opencv4nodejs#master",
     "pug": "^2.0.4",
     "stream-filter": "^2.1.0",

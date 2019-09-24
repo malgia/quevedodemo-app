@@ -4,7 +4,7 @@ const fs = require('fs');
 const { cv, grabFrames } = require('./opencv-helpers');
 const { opencv, classNames } = require('./config');
 // const openalpr = require ("node-openalpr");
-const tesseract = require('node-tesseract');
+// const tesseract = require('node-tesseract');
 
 // openalpr.Start ();
 
@@ -65,7 +65,7 @@ exports.objectDetect = (im) => {
 
 	for (let y = 0; y < numRows; y += 1) {
 		const confidence = outputBlob.at([0, 0, y, 2]);
-		if (confidence > 0.5) {
+		if (confidence > 0.3) {
 			const classId = outputBlob.at([0, 0, y, 1]);
 			const className = classNames[classId];
 			const boxX = imgWidth * outputBlob.at([0, 0, y, 3]);
