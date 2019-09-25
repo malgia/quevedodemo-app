@@ -34,6 +34,6 @@
   },
   "opencv4nodejs": {
     "autoBuildFlags": "-DBUILD_opencv_dnn_objdetect=ON",
-    "autoBuildOpencvVersion": "4.1.1"
+    "autoBuildOpencvVersion": "3.4.1"
   }
 }
