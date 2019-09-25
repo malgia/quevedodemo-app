@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "nodemon -r esm ./start.js",
-    "start": "BINDINGS_DEBUG=true NODE_ENV=development node -r esm ./start.js"
+    "start": "node -r esm ./start.js"
   },
   "keywords": [],
   "author": "",
