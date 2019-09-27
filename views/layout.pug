@@ -62,8 +62,9 @@ html
             });
 
             function initCamDetect(){
-                if(navigator.mediaDevices.getUserMedia){
-                    navigator.mediaDevices.getUserMedia({video: { deviceId: { exact: jQuery('#availablecams2').val() }}}).then(function(stream) {
+                var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+                if(getUserMedia){
+                getUserMedia.call(navigator, {video: { deviceId: { exact: jQuery('#availablecams2').val() }}}, function (stream) {
                         var video = document.getElementById('preview');
                         jQuery('#preview').hide();
                         video.srcObject = stream;
