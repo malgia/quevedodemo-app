@@ -63,7 +63,7 @@ html
 
             function initCamDetect(){
                 if(navigator.mediaDevices.getUserMedia){
-                    navigator.mediaDevices.getUserMedia({ video: { facingMode: jQuery('#availablecams2').value }}).then(function(stream) {
+                    navigator.mediaDevices.getUserMedia({ video: { facingMode: jQuery('#availablecams2').val() }}).then(function(stream) {
                         var video = document.getElementById('preview');
                         jQuery('#preview').hide();
                         video.srcObject = stream;
