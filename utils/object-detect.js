@@ -108,7 +108,7 @@ exports.objectDetect = (im) => {
 				openalpr.Start ();
 
 				for (var i = 0; i < 350; i++) {
-					openalpr.IdentifyLicense (filename, function (error, output) {
+					/*openalpr.IdentifyLicense (filename, function (error, output) {
 						var results = output.results;
 						console.log(output);
 						if(results.length > 0) {
@@ -119,7 +119,7 @@ exports.objectDetect = (im) => {
 						if (i == 349) {
 				            console.log (openalpr.Stop ());
 				        }
-					});
+					});*/
 				}
 			}
 		}
