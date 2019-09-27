@@ -3,10 +3,9 @@ const fs = require('fs');
 
 const { cv, grabFrames } = require('./opencv-helpers');
 const { opencv, classNames } = require('./config');
-// const openalpr = require ("node-openalpr");
+const openalpr = require ("node-openalpr");
 // const tesseract = require('node-tesseract');
 
-// openalpr.Start ();
 
 if (!cv.modules.dnn) {
 	throw new Error('exiting: opencv4nodejs compiled without dnn module');
@@ -104,16 +103,22 @@ exports.objectDetect = (im) => {
 			// 	}
 			// });
 
+			openalpr.Start ();
 
-			// openalpr.IdentifyLicense (filename, function (error, output) {
-			// 	var results = output.results;
-			// 	console.log(output);
-			// 	if(results.length > 0) {
-			// 		img.putText('Placa: '+results[0].plate, org, fontFace, fontScale, textColor, thickness);
-			// 	} else {
-			//
-			// 	}
-			// });
+			for (var i = 0; i < 350; i++) {
+				openalpr.IdentifyLicense (path, function (error, output) {
+					var results = output.results;
+					console.log(output);
+					if(results.length > 0) {
+						img.putText('Placa: '+results[0].plate, org, fontFace, fontScale, textColor, thickness);
+					} else {
+
+					}
+					if (i == 349) {
+			            console.log (openalpr.Stop ());
+			        }
+				});
+			}
 		}
 	}
 
