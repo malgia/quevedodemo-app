@@ -96,10 +96,12 @@ html
             }
 
             jQuery(document).ready(function(){
-                const devices = navigator.mediaDevices.enumerateDevices();
-                const videoDevices = devices.filter(device => device.kind === 'videoinput');
-                const options = videoDevices.map(videoDevice => {
-                    return `<option value="${videoDevice.deviceId}">${videoDevice.label}</option>`;
-                });
-                jQuery('#availablecams2').innerHTML = options.join('');
+                navigator.mediaDevices.enumerateDevices().then(function(devices){
+                    console.log(devices);
+                    const videoDevices = devices.filter(device => device.kind === 'videoinput');
+                    const options = videoDevices.map(videoDevice => {
+                        return `<option value="${videoDevice.deviceId}">${videoDevice.label}</option>`;
+                    });
+                    jQuery('#availablecams2').innerHTML = options.join('');
+                }, function(err) { console.log(err); });
             });
