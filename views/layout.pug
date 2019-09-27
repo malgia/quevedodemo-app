@@ -10,97 +10,98 @@ html
 
   body
     div(class="container")
-        img(src="/images/quevedo.png")
-        h1(class="text-center") Control de Motos GAD Quevedo
-        block content
+        div(class="text-center")
+            img(src="/images/quevedo.png")
+            h1 Control de Motos GAD Quevedo
+            block content
 
-        script(type="text/javascript").
-            var scanner = null;
+            script(type="text/javascript").
+                var scanner = null;
 
-            function initCamQR(){
-                var opts = { video: document.getElementById('preview') };
-                var sel = document.getElementById('availablecams');
-                var selCam = sel.options[sel.selectedIndex].value;
+                function initCamQR(){
+                    var opts = { video: document.getElementById('preview') };
+                    var sel = document.getElementById('availablecams');
+                    var selCam = sel.options[sel.selectedIndex].value;
 
-                if(selCam==1) {
-                    opts = { video: document.getElementById('preview'), mirror: false };
+                    if(selCam==1) {
+                        opts = { video: document.getElementById('preview'), mirror: false };
+                    }
+                    jQuery('#preview').show();
+                    scanner = new Instascan.Scanner( opts );
+                    scanner.addListener('scan', function (content) {
+                        window.location.href = '/motos/'+content;
+                    });
+                    Instascan.Camera.getCameras().then(function (cameras) {
+                        if (cameras.length > 0) {
+                            scanner.start(cameras[selCam]);
+                        } else {
+                            console.error('No cameras found.');
+                        }
+                    }).catch(function (e) {
+                    console.error(e);
+                    });
                 }
-                jQuery('#preview').show();
-                scanner = new Instascan.Scanner( opts );
-                scanner.addListener('scan', function (content) {
-                    window.location.href = '/motos/'+content;
-                });
+
                 Instascan.Camera.getCameras().then(function (cameras) {
+                    var sel = document.getElementById('availablecams');
+                    sel.addEventListener("change", function(){
+                        if(scanner != null) {
+                            scanner.stop();
+                        }
+                    });
                     if (cameras.length > 0) {
-                        scanner.start(cameras[selCam]);
+                        cameras.forEach(function(cam, i){
+                            var opt = document.createElement('option');
+                            opt.appendChild( document.createTextNode(cam.name) );
+                            opt.value = i;
+                            sel.appendChild(opt);
+                        });
                     } else {
                         console.error('No cameras found.');
                     }
                 }).catch(function (e) {
-                console.error(e);
+                    console.error(e);
                 });
-            }
 
-            Instascan.Camera.getCameras().then(function (cameras) {
-                var sel = document.getElementById('availablecams');
-                sel.addEventListener("change", function(){
-                    if(scanner != null) {
-                        scanner.stop();
-                    }
-                });
-                if (cameras.length > 0) {
-                    cameras.forEach(function(cam, i){
-                        var opt = document.createElement('option');
-                        opt.appendChild( document.createTextNode(cam.name) );
-                        opt.value = i;
-                        sel.appendChild(opt);
-                    });
-                } else {
-                    console.error('No cameras found.');
-                }
-            }).catch(function (e) {
-                console.error(e);
-            });
-
-            function initCamDetect(){
-                var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-                if(getUserMedia){
-                getUserMedia.call(navigator, {video: { deviceId: { exact: jQuery('#availablecams2').val() }}}, function (stream) {
-                        var video = document.getElementById('preview');
-                        jQuery('#preview').hide();
-                        video.srcObject = stream;
-                        video.onloadedmetadata = function(e) {
-                            video.play();
-                        };
-                        setInterval(function(){
-                            var frame = captureVideoFrame('preview', 'jpeg');
-                            var img = document.getElementById('screenshot');
-                            img.setAttribute('src', frame.dataUri);
-                            var formData = new FormData();
-                            formData.append('screenshot', frame.blob, 'screenshot.' + frame.format);
-                            jQuery.ajax({
-                                url: '/objectDetect',
-                                method: 'POST',
-                                data: formData,
-                                processData: false,
-                                contentType: false,
-                                complete: function(res, status){
-                                    if(res.responseJSON.message){
-                                        document.getElementById('proccesed').setAttribute('src', res.responseJSON.message);
+                function initCamDetect(){
+                    var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+                    if(getUserMedia){
+                    getUserMedia.call(navigator, {video: { deviceId: { exact: jQuery('#availablecams2').val() }}}, function (stream) {
+                            var video = document.getElementById('preview');
+                            jQuery('#preview').hide();
+                            video.srcObject = stream;
+                            video.onloadedmetadata = function(e) {
+                                video.play();
+                            };
+                            setInterval(function(){
+                                var frame = captureVideoFrame('preview', 'jpeg');
+                                var img = document.getElementById('screenshot');
+                                img.setAttribute('src', frame.dataUri);
+                                var formData = new FormData();
+                                formData.append('screenshot', frame.blob, 'screenshot.' + frame.format);
+                                jQuery.ajax({
+                                    url: '/objectDetect',
+                                    method: 'POST',
+                                    data: formData,
+                                    processData: false,
+                                    contentType: false,
+                                    complete: function(res, status){
+                                        if(res.responseJSON.message){
+                                            document.getElementById('proccesed').setAttribute('src', res.responseJSON.message);
+                                        }
                                     }
-                                }
-                            });
-                        }, 500);
-                    });
+                                });
+                            }, 500);
+                        });
+                    }
                 }
-            }
 
-            jQuery(document).ready(function(){
-                navigator.mediaDevices.enumerateDevices().then(function(devices){
-                    const videoDevices = devices.filter(device => device.kind === 'videoinput');
-                    const options = videoDevices.map(videoDevice => {
-                        return `<option value="${videoDevice.deviceId}">${videoDevice.label}</option>`;
-                    });
-                    jQuery('#availablecams2').append(options);
-                }, function(err) { console.log(err); });
-            });
+                jQuery(document).ready(function(){
+                    navigator.mediaDevices.enumerateDevices().then(function(devices){
+                        const videoDevices = devices.filter(device => device.kind === 'videoinput');
+                        const options = videoDevices.map(videoDevice => {
+                            return `<option value="${videoDevice.deviceId}">${videoDevice.label}</option>`;
+                        });
+                        jQuery('#availablecams2').append(options);
+                    }, function(err) { console.log(err); });
+                });
