@@ -3,7 +3,7 @@ const fs = require('fs');
 
 const { cv, grabFrames } = require('./opencv-helpers');
 const { opencv, classNames } = require('./config');
-const openalpr = require ("node-openalpr");
+// const openalpr = require ("node-openalpr");
 // const tesseract = require('node-tesseract');
 
 
