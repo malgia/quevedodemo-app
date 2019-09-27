@@ -3,17 +3,21 @@ extends layout
 block content
 
   if motorcycles.length
-    table
-      tr
-        th # Placa
-        th Nombre
-        th Fecha de Caducidad
-        th # Pasajeros
-      each motorcycle in motorcycles
+    div(class="row")
+        div(class="col-xs-12 col-md-6")
+        table(class="table-striped")
         tr
-          td= motorcycle.plateid
-          td= motorcycle.name
-          td= motorcycle.expiredate
-          td= motorcycle.passengers
-  else
-    p No se encontro la motocicleta
+            th # Placa
+            th # Placa Corta
+            th Nombre
+            th Fecha de Caducidad
+            th # Pasajeros
+        each motorcycle in motorcycles
+        tr
+            td= motorcycle.shortid
+            td= motorcycle.plateid
+            td= motorcycle.name
+            td= motorcycle.expiredate
+            td= motorcycle.passengers
+    else
+        p No se encontro la motocicleta
