@@ -44,20 +44,22 @@ html
 
                 Instascan.Camera.getCameras().then(function (cameras) {
                     var sel = document.getElementById('availablecams');
-                    sel.addEventListener("change", function(){
-                        if(scanner != null) {
-                            scanner.stop();
-                        }
-                    });
-                    if (cameras.length > 0) {
-                        cameras.forEach(function(cam, i){
-                            var opt = document.createElement('option');
-                            opt.appendChild( document.createTextNode(cam.name) );
-                            opt.value = i;
-                            sel.appendChild(opt);
+                    if(sel){
+                        sel.addEventListener("change", function(){
+                            if(scanner != null) {
+                                scanner.stop();
+                            }
                         });
-                    } else {
-                        console.error('No cameras found.');
+                        if (cameras.length > 0) {
+                            cameras.forEach(function(cam, i){
+                                var opt = document.createElement('option');
+                                opt.appendChild( document.createTextNode(cam.name) );
+                                opt.value = i;
+                                sel.appendChild(opt);
+                            });
+                        } else {
+                            console.error('No cameras found.');
+                        }
                     }
                 }).catch(function (e) {
                     console.error(e);
