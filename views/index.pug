@@ -12,12 +12,12 @@ block content
                     th Nombre
                     th Fecha de Caducidad
                     th # Pasajeros
-            each motorcycle in motorcycles
-                tr
-                    td= motorcycle.shortid
-                    td= motorcycle.plateid
-                    td= motorcycle.name
-                    td= motorcycle.expiredate
-                    td= motorcycle.passengers
+                each motorcycle in motorcycles
+                    tr
+                        td= motorcycle.shortid
+                        td= motorcycle.plateid
+                        td= motorcycle.name
+                        td= motorcycle.expiredate
+                        td= motorcycle.passengers
     else
         p No se encontro la motocicleta
