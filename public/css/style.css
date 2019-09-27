@@ -18,3 +18,13 @@ h2 {
 .hidden {
     display: none;
 }
+
+.btn-primary {
+    color: #80cc27;
+    border-color: #80cc27;
+}
+
+.btn-primary:hover {
+    color: #3eb83c;
+    border-color: #3eb83c;
+}
