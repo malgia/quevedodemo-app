@@ -103,7 +103,7 @@ exports.objectDetect = (im) => {
 			// 	}
 			// });
 
-			if (fs.existsSync(filename)) {
+			/*if (fs.existsSync(filename)) {
 
 				openalpr.Start ();
 
@@ -111,20 +111,20 @@ exports.objectDetect = (im) => {
 					openalpr.IdentifyLicense (filename, function (error, output) {
 						var results = output.results;
 						console.log(output);
-						/*if(results.length > 0) {
+						if(results.length > 0) {
 							img.putText('Placa: '+results[0].plate, org, fontFace, fontScale, textColor, thickness);
 						} else {
 
 						}
 						if (i == 349) {
 				            console.log (openalpr.Stop ());
-				        }*/
+				        }
 						if (error) {
 							console.log(error);
 						}
 					});
 				}
-			}
+			}*/
 		}
 	}
 
