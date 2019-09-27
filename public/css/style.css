@@ -7,7 +7,7 @@ img {
 }
 
 video, select {
-    width: 400px;
+    width: 100%;
     max-width: 100%;
 }
 
@@ -20,11 +20,11 @@ h2 {
 }
 
 .btn-primary {
-    color: #80cc27;
+    background-color: #80cc27;
     border-color: #80cc27;
 }
 
 .btn-primary:hover {
-    color: #3eb83c;
+    background-color: #3eb83c;
     border-color: #3eb83c;
 }

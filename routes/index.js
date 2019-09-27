@@ -9,7 +9,7 @@ const upload = multer().single('screenshot')
 const Motorcycle = mongoose.model('Motorcycle');
 
 router.get('/', (req, res) => {
-  res.render('form', { title: 'Registration form' });
+  res.render('form', { title: 'Control de Motos GAD Quevedo' });
 });
 
 router.post('/',
