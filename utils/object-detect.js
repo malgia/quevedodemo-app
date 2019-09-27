@@ -103,21 +103,24 @@ exports.objectDetect = (im) => {
 			// 	}
 			// });
 
-			openalpr.Start ();
+			if (fs.existsSync(filename)) {
 
-			for (var i = 0; i < 350; i++) {
-				openalpr.IdentifyLicense (filename, function (error, output) {
-					var results = output.results;
-					console.log(output);
-					if(results.length > 0) {
-						img.putText('Placa: '+results[0].plate, org, fontFace, fontScale, textColor, thickness);
-					} else {
+				openalpr.Start ();
 
-					}
-					if (i == 349) {
-			            console.log (openalpr.Stop ());
-			        }
-				});
+				for (var i = 0; i < 350; i++) {
+					openalpr.IdentifyLicense (filename, function (error, output) {
+						var results = output.results;
+						console.log(output);
+						if(results.length > 0) {
+							img.putText('Placa: '+results[0].plate, org, fontFace, fontScale, textColor, thickness);
+						} else {
+
+						}
+						if (i == 349) {
+				            console.log (openalpr.Stop ());
+				        }
+					});
+				}
 			}
 		}
 	}
