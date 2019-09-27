@@ -1,5 +1,14 @@
+body {
+    background-color: #ddd;
+}
+
+img {
+    max-width: 100%;
+}
+
 video, select {
     width: 400px;
+    max-width: 100%;
 }
 
 .hidden {
