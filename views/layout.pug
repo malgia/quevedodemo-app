@@ -63,8 +63,7 @@ html
 
             function initCamDetect(){
                 if(navigator.mediaDevices.getUserMedia){
-                    navigator.mediaDevices.getUserMedia({ video: { facingMode: jQuery('#availablecams2').val() }}).then(function(stream) {
-                        console.log(jQuery('#availablecams2').val());
+                    navigator.mediaDevices.getUserMedia({video: true, deviceId: { exact: jQuery('#availablecams2').val() }}).then(function(stream) {
                         var video = document.getElementById('preview');
                         jQuery('#preview').hide();
                         video.srcObject = stream;
@@ -100,17 +99,8 @@ html
                 navigator.mediaDevices.enumerateDevices().then(function(devices){
                     const videoDevices = devices.filter(device => device.kind === 'videoinput');
                     const options = videoDevices.map(videoDevice => {
-                        return `${videoDevice.label}`;
+                        return `<option value="${videoDevice.deviceId}">${videoDevice.label}</option>`;
                     });
-                    if(options.length > 1) {
-                        options.forEach(function(option, i){
-                            if(i==0) {
-                                jQuery('#availablecams2').append('<option value="user">'+option+'</option>');
-                            } else {
-                                jQuery('#availablecams2').append('<option value="environment">'+option+'</option>');
-                            }
-                        });
-                    }
-
+                    jQuery('#availablecams2').append(options);
                 }, function(err) { console.log(err); });
             });
