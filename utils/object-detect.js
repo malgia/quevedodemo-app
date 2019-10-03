@@ -92,7 +92,7 @@ exports.objectDetect = (im) => {
 			// put text on the object
 			img.putText(text, org, fontFace, fontScale, textColor, thickness);
 
-			tesseract.recognize(filename, {language: 'Shentox', tessdataDir: './tessdata' ,configfiles: './tesseract.config'}, (err, data) => {
+			tesseract.recognize(filename, {language: 'Shentox', tessdataDir: './tessdata' /*,configfiles: './tesseract.config'*/}, (err, data) => {
 				if(err || !data ) {
 					if (fs.existsSync(filename, err=> {if(err) console.log(err)})) {
 						fs.unlinkSync(filename, err=> {if(err) console.log(err)});
