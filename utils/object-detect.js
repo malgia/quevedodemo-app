@@ -4,7 +4,7 @@ const fs = require('fs');
 const { cv, grabFrames } = require('./opencv-helpers');
 const { opencv, classNames } = require('./config');
 // const openalpr = require ("node-openalpr");
-// const tesseract = require('node-tesseract');
+const tesseract = require('tesseractocr');
 
 
 if (!cv.modules.dnn) {
@@ -92,39 +92,45 @@ exports.objectDetect = (im) => {
 			// put text on the object
 			img.putText(text, org, fontFace, fontScale, textColor, thickness);
 
-			// tesseract.process(filename, {psm: 8, 'user-patterns': '/public/js/patterns'} , (err, data) => {
-			// 	console.log('res',data,'err',err);
-			// 	if(err || data == null) {
-			// 		if (fs.existsSync(filename, err=> {if(err) console.log(err)})) {
-			// 			fs.unlinkSync(filename, err=> {if(err) console.log(err)});
-			// 		}
-			// 	} else {
-			// 		console.log(data);
-			// 	}
-			// });
-
-			/*if (fs.existsSync(filename)) {
-
-				openalpr.Start ();
-
-				for (var i = 0; i < 350; i++) {
-					openalpr.IdentifyLicense (filename, function (error, output) {
-						var results = output.results;
-						console.log(output);
-						if(results.length > 0) {
-							img.putText('Placa: '+results[0].plate, org, fontFace, fontScale, textColor, thickness);
-						} else {
-
-						}
-						if (i == 349) {
-				            console.log (openalpr.Stop ());
-				        }
-						if (error) {
-							console.log(error);
-						}
-					});
+			tesseract.recognize(filename, {language: 'Shentox', tessdataDir: './tessdata' ,configfiles: './tesseract.config'}, (err, data) => {
+				if(err || !data ) {
+					if (fs.existsSync(filename, err=> {if(err) console.log(err)})) {
+						fs.unlinkSync(filename, err=> {if(err) console.log(err)});
+					}
+					console.log('nothing');
+				} else {
+					data = data.trim();
+					if(data.lenght != 3){
+						console.log('wrong:'+data);
+					} else {
+						console.log('Placa #'+data);
+						img.putText('Placa #'+data, org, fontFace, fontScale, textColor, thickness);
+					}
 				}
-			}*/
+			});
+
+			// if (fs.existsSync(filename)) {
+			//
+			// 	openalpr.Start ();
+			//
+			// 	for (var i = 0; i < 350; i++) {
+			// 		openalpr.IdentifyLicense (filename, function (error, output) {
+						// var results = output.results;
+						// console.log(output);
+						// if(results.length > 0) {
+						// 	img.putText('Placa: '+results[0].plate, org, fontFace, fontScale, textColor, thickness);
+						// } else {
+						//
+						// }
+						// if (i == 349) {
+				        //     console.log (openalpr.Stop ());
+				        // }
+						// if (error) {
+						// 	console.log(filename);
+						// }
+			// 		});
+			// 	}
+			// }
 		}
 	}
 
