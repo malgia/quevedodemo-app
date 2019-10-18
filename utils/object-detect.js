@@ -65,7 +65,7 @@ exports.objectDetect = (im) => {
 	                return cnt.getPoints();
 	            });
 				//console.log(imgCnts);
-				thresh.drawContours(imgCnts, -1, new cv.Vec(0,0,255), 2);
+				// thresh.drawContours(imgCnts, -1, new cv.Vec(0,0,255), 2);
 				cv.imwrite(filename, thresh);
 				tesseract.recognize(filename, {language: 'Shentox', tessdataDir: 'utils/tessdata' ,configfiles: 'utils/tesseract.config', psm: 9, userWords: 'utils/tessdata/Shentox.userwords'}, (err, data) => {
 					if(err) {
@@ -86,7 +86,7 @@ exports.objectDetect = (im) => {
 							} else {
 								console.log('Placa #'+data);
 								img.putText('Placa #Ba7', new cv.Point(50, 50), cv.FONT_HERSHEY_SIMPLEX, 1, new cv.Vec(255, 0, 0), 3);
-								return 'data:image/jpeg;base64,'+cv.imencode('.jpg', thresh).toString('base64');
+								return 'data:image/jpeg;base64,'+cv.imencode('.jpg', img).toString('base64');
 							}
 						}
 					}
