@@ -85,7 +85,7 @@ exports.objectDetect = (im) => {
 								console.log('wrong:'+data);
 							} else {
 								console.log('Placa #'+data);
-								img.putText('Placa #Ba7', new cv.Point(0, 15), cv.FONT_HERSHEY_SIMPLEX, 1, new cv.Vec(123, 123, 255), 3);
+								img.putText('Placa #Ba7', new cv.Point(50, 50), cv.FONT_HERSHEY_SIMPLEX, 1, new cv.Vec(255, 0, 0), 3);
 							}
 						}
 					}
