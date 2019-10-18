@@ -86,6 +86,7 @@ exports.objectDetect = (im) => {
 							} else {
 								console.log('Placa #'+data);
 								img.putText('Placa #Ba7', new cv.Point(50, 50), cv.FONT_HERSHEY_SIMPLEX, 1, new cv.Vec(255, 0, 0), 3);
+								return 'data:image/jpeg;base64,'+cv.imencode('.jpg', thresh).toString('base64');
 							}
 						}
 					}
