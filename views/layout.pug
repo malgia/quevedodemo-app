@@ -103,6 +103,7 @@ html
                     setTimeout(function(){navigator.mediaDevices.enumerateDevices().then(function(devices){
                         const videoDevices = devices.filter(device => device.kind === 'videoinput');
                         const options = videoDevices.map(videoDevice => {
+                            alert(videoDevice.deviceId);
                             return '<option value="'+videoDevice.deviceId+'">'+videoDevice.label+'</option>';
                         });
                         jQuery('#availablecams2').append(options);
