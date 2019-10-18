@@ -68,8 +68,10 @@ html
 
                 function initCamDetect(){
                     var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.mediaDevices.getUserMedia;
+                    alert(getUserMedia);
                     if(getUserMedia){
                     getUserMedia.call(navigator, {video: { deviceId: { exact: jQuery('#availablecams2').val() }}}, function (stream) {
+                            alert(stream);
                             var video = document.getElementById('preview');
                             jQuery('#preview').hide();
                             video.srcObject = stream;
@@ -94,7 +96,7 @@ html
                                         }
                                     }
                                 });
-                            }, 100);
+                            }, 300);
                         });
                     }
                 }
@@ -103,7 +105,6 @@ html
                     setTimeout(function(){navigator.mediaDevices.enumerateDevices().then(function(devices){
                         const videoDevices = devices.filter(device => device.kind === 'videoinput');
                         const options = videoDevices.map(videoDevice => {
-                            alert(videoDevice.deviceId);
                             return '<option value="'+videoDevice.deviceId+'">'+videoDevice.label+'</option>';
                         });
                         jQuery('#availablecams2').append(options);
