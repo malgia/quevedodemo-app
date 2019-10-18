@@ -102,10 +102,10 @@ html
                 jQuery(document).ready(function(){
                     navigator.mediaDevices.enumerateDevices().then(function(devices){
                         const videoDevices = devices.filter(device => device.kind === 'videoinput');
-                        alert(videoDevices);
                         const options = videoDevices.map(videoDevice => {
                             return `<option value="${videoDevice.deviceId}">${videoDevice.label}</option>`;
                         });
+                        alert(options);
                         jQuery('#availablecams2').append(options);
                     }, function(err) { console.log(err); });
                 });
