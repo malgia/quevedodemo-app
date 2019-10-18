@@ -69,11 +69,11 @@ html
                 function initCamDetect(){
                     var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.mediaDevices.getUserMedia;
                     if(getUserMedia){
-                    getUserMedia.call(navigator, {video: { deviceId: { exact: jQuery('#availablecams2').val() }}}, function (stream) {
+                        getUserMedia.call(navigator, {video: { deviceId: { exact: jQuery('#availablecams2').val() }}}, function (stream) {
                             var video = document.getElementById('preview');
                             jQuery('#preview').hide();
                             video.setAttribute('playsinline', true);
-                            video.setAttribute('controls', true);
+                            video.setAttribute('autoplay', true);
                             setTimeout(() => {
                                 video.removeAttribute('controls');
                             });
