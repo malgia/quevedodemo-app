@@ -74,6 +74,11 @@ html
                             alert(stream);
                             var video = document.getElementById('preview');
                             jQuery('#preview').hide();
+                            video.setAttribute('playsinline', true);
+                            video.setAttribute('controls', true);
+                            setTimeout(() => {
+                                video.removeAttribute('controls');
+                            });
                             video.srcObject = stream;
                             video.onloadedmetadata = function(e) {
                                 video.play();
