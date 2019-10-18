@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs');
 
 const { cv, grabFrames } = require('./opencv-helpers');
+const matchFeatures = require('./match-features');
 const { opencv, classNames } = require('./config');
 // const openalpr = require ("node-openalpr");
 const tesseract = require('tesseractocr');
@@ -48,9 +49,55 @@ exports.objectDetect = (im) => {
 
 	const img = cv.imdecode(Buffer.from(im, 'base64'));
 	const filename = 'public/images/screenshot_'+new Date().toLocaleString().split(' ').join('')+'.jpg';
-	fs.writeFile(filename, im, {encoding: 'base64'}, function(err) {
+	try{
+		fs.writeFileSync(filename, im, {encoding: 'base64'});
+		//console.log('success');
+		if (fs.existsSync(filename, err=> {if(err) console.log(err)})) {
+			//console.log(filename);
+			const plate_img = cv.imread(filename);
+			gray = plate_img.cvtColor(cv.COLOR_BGR2GRAY)
+			blurred = gray.gaussianBlur(new cv.Size(5, 5), 0)
+			thresh = blurred.threshold(60, 255, cv.THRESH_BINARY)
+			cnts = thresh.findContours(cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE);
+			if(cnts){
+				cnts = cnts.sort((c0, c1) => c1.area - c0.area);
+				const imgCnts = cnts.map((cnt) => {
+	                return cnt.getPoints();
+	            });
+				//console.log(imgCnts);
+				thresh.drawContours(imgCnts, -1, new cv.Vec(0,0,255), 2);
+				cv.imwrite(filename, thresh);
+				tesseract.recognize(filename, {language: 'Shentox', tessdataDir: 'utils/tessdata' ,configfiles: 'utils/tesseract.config', psm: 9, userWords: 'utils/tessdata/Shentox.userwords'}, (err, data) => {
+					if(err) {
+						console.log('err:',err.stderr);
+						if (fs.existsSync(filename, err=> {if(err) console.log(err)})) {
+							fs.unlinkSync(filename, err=> {if(err) console.log(err)});
+						}
+					}else{
+						if(!data ) {
+							console.log('nothing');
+							if (fs.existsSync(filename, err=> {if(err) console.log(err)})) {
+								fs.unlinkSync(filename, err=> {if(err) console.log(err)});
+							}
+						} else {
+							data = data.trim();
+							if(data.length != 3){
+								console.log('wrong:'+data);
+							} else {
+								console.log('Placa #'+data);
+								img.putText('Placa #Ba7', new cv.Point(0, 15), cv.FONT_HERSHEY_SIMPLEX, 1, new cv.Vec(123, 123, 255), 3);
+							}
+						}
+					}
+				});
+				//cv.imshowWait('ORB with BFMatcher - crossCheck true', thresh);
+			}
 
-	});
+		}
+	}catch(err){
+		console.log(err);
+	}
+
 	const inputBlob = cv.blobFromImage(img, 1, size, vec3, true, true);
 	net.setInput(inputBlob);
 
@@ -92,23 +139,6 @@ exports.objectDetect = (im) => {
 			// put text on the object
 			img.putText(text, org, fontFace, fontScale, textColor, thickness);
 
-			tesseract.recognize(filename, {/*language: 'Shentox', tessdataDir: './tessdata' ,*/configfiles: './tesseract.config'}, (err, data) => {
-				if(err || !data ) {
-					if (fs.existsSync(filename, err=> {if(err) console.log(err)})) {
-						fs.unlinkSync(filename, err=> {if(err) console.log(err)});
-					}
-					console.log('nothing');
-				} else {
-					data = data.trim();
-					if(data.lenght != 3){
-						console.log('wrong:'+data);
-					} else {
-						console.log('Placa #'+data);
-						img.putText('Placa #'+data, org, fontFace, fontScale, textColor, thickness);
-					}
-				}
-			});
-
 			// if (fs.existsSync(filename)) {
 			//
 			// 	openalpr.Start ();
@@ -133,6 +163,8 @@ exports.objectDetect = (im) => {
 			// }
 		}
 	}
+
+
 
 	// write the jpg binary data to stdout
 	return 'data:image/jpeg;base64,'+cv.imencode('.jpg', img).toString('base64');
