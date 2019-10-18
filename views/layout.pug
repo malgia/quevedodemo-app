@@ -103,7 +103,7 @@ html
                     navigator.mediaDevices.enumerateDevices().then(function(devices){
                         const videoDevices = devices.filter(device => device.kind === 'videoinput');
                         const options = videoDevices.map(videoDevice => {
-                            return `<option value="${videoDevice.deviceId}">${videoDevice.label}</option>`;
+                            return '<option value="${videoDevice.deviceId}">${videoDevice.label}</option>';
                         });
                         alert(options);
                         jQuery('#availablecams2').append(options);
