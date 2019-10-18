@@ -79,81 +79,10 @@ exports.objectDetect = (im) => {
 							if (fs.existsSync(filename, err=> {if(err) console.log(err)})) {
 								fs.unlinkSync(filename, err=> {if(err) console.log(err)});
 							}
-							const inputBlob = cv.blobFromImage(img, 1, size, vec3, true, true);
-							net.setInput(inputBlob);
-
-							// forward pass input through entire network, will return
-							// classification result as 1x1xNxM Mat
-							const outputBlob = net.forward();
-
-							// get height and width from the image
-							const [imgHeight, imgWidth] = img.sizes;
-							const numRows = outputBlob.sizes.slice(2, 3);
-
-							for (let y = 0; y < numRows; y += 1) {
-								const confidence = outputBlob.at([0, 0, y, 2]);
-								if (confidence > 0.3) {
-									const classId = outputBlob.at([0, 0, y, 1]);
-									const className = classNames[classId];
-									const boxX = imgWidth * outputBlob.at([0, 0, y, 3]);
-									const boxY = imgHeight * outputBlob.at([0, 0, y, 4]);
-									const boxWidht = imgWidth * outputBlob.at([0, 0, y, 5]);
-									const boxHeight = imgHeight * outputBlob.at([0, 0, y, 6]);
-
-									const pt1 = new cv.Point(boxX, boxY);
-									const pt2 = new cv.Point(boxWidht, boxHeight);
-									const rectColor = new cv.Vec(23, 230, 210);
-									const rectThickness = 2;
-									const rectLineType = cv.LINE_8;
-
-									// draw the rect for the object
-									img.drawRectangle(pt1, pt2, rectColor, rectThickness, rectLineType);
-
-									// const text = `${className} ${confidence.toFixed(5)}`;
-									const text = `${className}`;
-									const org = new cv.Point(boxX, boxY + 15);
-									const fontFace = cv.FONT_HERSHEY_SIMPLEX;
-									const fontScale = 0.5;
-									const textColor = new cv.Vec(123, 123, 255);
-									const thickness = 2;
-
-									// put text on the object
-									img.putText(text, org, fontFace, fontScale, textColor, thickness);
-
-									// if (fs.existsSync(filename)) {
-									//
-									// 	openalpr.Start ();
-									//
-									// 	for (var i = 0; i < 350; i++) {
-									// 		openalpr.IdentifyLicense (filename, function (error, output) {
-												// var results = output.results;
-												// console.log(output);
-												// if(results.length > 0) {
-												// 	img.putText('Placa: '+results[0].plate, org, fontFace, fontScale, textColor, thickness);
-												// } else {
-												//
-												// }
-												// if (i == 349) {
-										        //     console.log (openalpr.Stop ());
-										        // }
-												// if (error) {
-												// 	console.log(filename);
-												// }
-									// 		});
-									// 	}
-									// }
-								}
-							}
-
-
-
-							// write the jpg binary data to stdout
-							return 'data:image/jpeg;base64,'+cv.imencode('.jpg', img).toString('base64');
 						} else {
 							data = data.trim();
 							if(data.length != 3){
 								console.log('wrong:'+data);
-								return 'data:image/jpeg;base64,'+cv.imencode('.jpg', img).toString('base64');
 							} else {
 								console.log('Placa #'+data);
 								thresh.putText('Placa #Ba7', new cv.Point(0, 0), cv.FONT_HERSHEY_SIMPLEX, 1, new cv.Vec(255, 0, 0), 3);
@@ -170,7 +99,76 @@ exports.objectDetect = (im) => {
 		console.log(err);
 	}
 
+	const inputBlob = cv.blobFromImage(img, 1, size, vec3, true, true);
+	net.setInput(inputBlob);
 
+	// forward pass input through entire network, will return
+	// classification result as 1x1xNxM Mat
+	const outputBlob = net.forward();
+
+	// get height and width from the image
+	const [imgHeight, imgWidth] = img.sizes;
+	const numRows = outputBlob.sizes.slice(2, 3);
+
+	for (let y = 0; y < numRows; y += 1) {
+		const confidence = outputBlob.at([0, 0, y, 2]);
+		if (confidence > 0.3) {
+			const classId = outputBlob.at([0, 0, y, 1]);
+			const className = classNames[classId];
+			const boxX = imgWidth * outputBlob.at([0, 0, y, 3]);
+			const boxY = imgHeight * outputBlob.at([0, 0, y, 4]);
+			const boxWidht = imgWidth * outputBlob.at([0, 0, y, 5]);
+			const boxHeight = imgHeight * outputBlob.at([0, 0, y, 6]);
+
+			const pt1 = new cv.Point(boxX, boxY);
+			const pt2 = new cv.Point(boxWidht, boxHeight);
+			const rectColor = new cv.Vec(23, 230, 210);
+			const rectThickness = 2;
+			const rectLineType = cv.LINE_8;
+
+			// draw the rect for the object
+			img.drawRectangle(pt1, pt2, rectColor, rectThickness, rectLineType);
+
+			// const text = `${className} ${confidence.toFixed(5)}`;
+			const text = `${className}`;
+			const org = new cv.Point(boxX, boxY + 15);
+			const fontFace = cv.FONT_HERSHEY_SIMPLEX;
+			const fontScale = 0.5;
+			const textColor = new cv.Vec(123, 123, 255);
+			const thickness = 2;
+
+			// put text on the object
+			img.putText(text, org, fontFace, fontScale, textColor, thickness);
+
+			// if (fs.existsSync(filename)) {
+			//
+			// 	openalpr.Start ();
+			//
+			// 	for (var i = 0; i < 350; i++) {
+			// 		openalpr.IdentifyLicense (filename, function (error, output) {
+						// var results = output.results;
+						// console.log(output);
+						// if(results.length > 0) {
+						// 	img.putText('Placa: '+results[0].plate, org, fontFace, fontScale, textColor, thickness);
+						// } else {
+						//
+						// }
+						// if (i == 349) {
+				        //     console.log (openalpr.Stop ());
+				        // }
+						// if (error) {
+						// 	console.log(filename);
+						// }
+			// 		});
+			// 	}
+			// }
+		}
+	}
+
+
+
+	// write the jpg binary data to stdout
+	return 'data:image/jpeg;base64,'+cv.imencode('.jpg', img).toString('base64');
 };
 
 // const runWebcamObjectDetect = (src, objectDetect) =>
