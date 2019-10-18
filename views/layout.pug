@@ -68,8 +68,8 @@ html
 
                 function initCamDetect(){
                     var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.mediaDevices.getUserMedia;
-                    alert(getUserMedia);
                     if(getUserMedia){
+                    alert(jQuery('#availablecams2').val());
                     getUserMedia.call(navigator, {video: { deviceId: { exact: jQuery('#availablecams2').val() }}}, function (stream) {
                             alert(stream);
                             var video = document.getElementById('preview');
