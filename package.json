@@ -24,7 +24,7 @@
     "node-pre-gyp": "^0.13.0",
     "opencv-build": "^0.1.9",
     "opencv4nodejs": "github:justadudewhohacks/opencv4nodejs#master",
-    "pug": "^2.0.4",
+    "pug": "^3.0.1",
     "stream-filter": "^2.1.0",
     "tesseractocr": "^1.2.1",
     "ws": "^6.1.0"
